@@ -1,0 +1,72 @@
+#:kivy 1.8.0
+
+RootWidget:
+    BoxLayout:
+        orientation: 'horizontal'
+        spacing: 0
+        padding: 0
+    
+        BoxLayout:
+            orientation: 'vertical'
+            padding: 0
+            spacing: 1
+
+            Label:
+                text: app.date
+                color: [1., 0, .616, 1.]
+
+            Label:
+                text: app.time
+                font_size: 50
+                color: [1., 0, .616, 1.]
+
+        BoxLayout:
+            orientation: 'vertical'
+            padding: 0
+            spacing: 3
+
+            Label:
+                text: "Kate's Musicbox"
+
+            Label:
+                text: app.song
+
+            Button:
+                text: 'Play'
+                on_release: app.playmusic()
+                background_color: [0, 1., .898, 1.]
+                background_normal: 'atlas://data/images/defaulttheme/button_pressed'
+                background_down: 'atlas://data/images/defaulttheme/button'
+
+
+            Button:
+                text: 'Play Five'
+                on_release: app.playall()
+                background_color: [.396, 0, 1., 1.]
+                background_normal: 'atlas://data/images/defaulttheme/button_pressed'
+                background_down: 'atlas://data/images/defaulttheme/button'
+
+            Button:
+                text: 'Stop'
+                on_release: app.stopmusic()
+                background_color: [1., 0, 0, 1.]
+
+            Button:
+                text: 'Volume +'
+                on_release: app.volup()
+                background_color: [.607, 1., 0, 1.]
+                background_normal: 'atlas://data/images/defaulttheme/button_pressed'
+                background_down: 'atlas://data/images/defaulttheme/button'
+
+            Button:
+                text: 'Volume -'
+                on_release: app.voldown()
+                background_color: [1., 0, .616, 1.]
+                background_normal: 'atlas://data/images/defaulttheme/button_pressed'
+                background_down: 'atlas://data/images/defaulttheme/button'
+
+        BoxLayout:
+            orientation: 'vertical'
+            padding: 0
+            spacing: 0
+

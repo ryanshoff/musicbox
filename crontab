@@ -1,0 +1,3 @@
+@reboot python /home/pi/musicbox/musicbox.py &
+
+
