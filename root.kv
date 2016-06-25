@@ -70,3 +70,34 @@ RootWidget:
             padding: 0
             spacing: 0
 
+            BoxLayout:
+                orientation: 'horizontal'
+                padding: 0
+                spacing: 0
+
+                Button:
+                    text: '+'
+                    on_press: app.hourup()
+                Button:
+                    text: '+'
+                    on_press: app.minuteup()
+                Button:
+                    text: '+'
+
+            Label:
+                text: app.alarm
+
+            BoxLayout:
+                orientation: 'horizontal'
+                padding: 0
+                spacing: 0
+
+                Button:
+                    text: '-'
+                    on_press: app.hourdown()
+                Button:
+                    text: '-'
+                    on_press: app.minutedown()
+                Button:
+                    text: '-'
+

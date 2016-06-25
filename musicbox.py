@@ -39,12 +39,21 @@ class EzsApp(App):
     song = Property('')
     time = Property('')
     date = Property('')
+    alarm = Property('')
 
     '''This is the app itself'''
 
     def update(self, *args):
         self.time = time.strftime('%I:%M:%S')
         self.date = time.strftime('%A %B %d %Y')
+        curhour = time.localtime().tm_hour
+        curmin = time.localtime().tm_min
+        cursec = time.localtime().tm_sec
+        if curhour == self.hour and curmin == self.minute and cursec == 0:
+            self.playall()
+
+    def updatealarm(self):
+        self.alarm = str(self.hour) + ':' + str(self.minute)
 
     def build(self):
         '''This method loads the root.kv file automatically
@@ -57,7 +66,8 @@ class EzsApp(App):
         chdir("/home/pi/musicbox")
         # loading the content of root.kv
         self.root = Builder.load_file('root.kv')
-        self.mixer = alsaaudio.Mixer('PCM')
+        self.mixer = alsaaudio.Mixer('PCM', cardindex=1)
+
         GPIO.setmode(GPIO.BCM)
         self.mp3_files = [ f for f in listdir('.') if f[-4:] == '.mp3' ]
 
@@ -66,6 +76,10 @@ class EzsApp(App):
             quit()
 
         self.index = 0
+
+        self.hour = 8
+        self.minute = 30
+        self.updatealarm()
 
     def clearsong():
         self.song = ''
@@ -116,19 +130,39 @@ class EzsApp(App):
         subprocess.call(['killall', 'mpg123'])
         print '--- Cleared all existing mp3s. ---'
 
+    def hourup(self):
+        if self.hour < 24:
+            self.hour += 1
+        self.updatealarm()
+
+    def minuteup(self):
+        if self.minute < 59:
+            self.minute += 1
+        self.updatealarm()
+
+    def hourdown(self):
+        if self.hour > 0:
+            self.hour -= 1
+        self.updatealarm()
+
+    def minutedown(self):
+        if self.minute > 0:
+            self.minute -= 1
+        self.updatealarm()
+
     def volup(self):
         vol = self.mixer.getvolume()
-        vol = vol[0]
-        vol = vol + 2
+        vol = int(vol[0])
+        vol = vol + 1
         #vol = min(vol, 100)
         vol = min(vol, 80)
         self.mixer.setvolume(vol)
 
     def voldown(self):
         vol = self.mixer.getvolume()
-        vol = vol[0]
-        vol = vol - 2
-        vol = max(vol, 50)
+        vol = int(vol[0])
+        vol = vol - 1
+        vol = max(vol, 0)
         self.mixer.setvolume(vol)
 
 if __name__ == '__main__':
