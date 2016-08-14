@@ -27,6 +27,8 @@ import RPi.GPIO as GPIO
 
 import alsaaudio
 
+alarmfile = 'alarm.mp3'
+alarmvol = 90
 
 class RootWidget(BoxLayout):
     '''Create a controller that receives a custom widget from the kv lang file.
@@ -50,7 +52,7 @@ class EzsApp(App):
         curmin = time.localtime().tm_min
         cursec = time.localtime().tm_sec
         if curhour == self.hour and curmin == self.minute and cursec == 0:
-            self.playall()
+            self.playalarm()
 
     def updatealarm(self):
         self.alarm = str(self.hour) + ':' + str(self.minute)
@@ -124,6 +126,11 @@ class EzsApp(App):
         subprocess.call(['killall', 'mpg123'])
         subprocess.Popen(['mpg123', self.mp3_files[self.index]])
         #popenAndCall(clearsong, ['mpg123', self.mp3_files[self.index]])
+
+    def playalarm(self):
+        self.mixer.setvolume(alarmvol)
+        subprocess.call(['killall', 'mpg123'])
+        subprocess.Popen(['mpg123', alarmfile])
 
     def stopmusic(self):
         self.song = ''
