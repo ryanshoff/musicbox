@@ -82,7 +82,8 @@ RootWidget:
                     text: '+'
                     on_press: app.minuteup()
                 Button:
-                    text: '+'
+                    text: 'On'
+                    on_press: app.alarmon()
 
             Label:
                 text: app.alarm
@@ -99,5 +100,7 @@ RootWidget:
                     text: '-'
                     on_press: app.minutedown()
                 Button:
-                    text: '-'
+                    text: 'Off'
+                    on_press: app.alarmoff()
+
 

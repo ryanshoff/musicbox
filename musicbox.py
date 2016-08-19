@@ -18,6 +18,7 @@ from kivy.clock import Clock
 import os
 import kivy
 import time
+import pickle
 kivy.require('1.8.0')
 
 from os import listdir
@@ -28,7 +29,8 @@ import RPi.GPIO as GPIO
 import alsaaudio
 
 alarmfile = 'alarm.mp3'
-alarmvol = 90
+alarmvol = 22 
+maxvol = 22 
 
 class RootWidget(BoxLayout):
     '''Create a controller that receives a custom widget from the kv lang file.
@@ -51,11 +53,16 @@ class EzsApp(App):
         curhour = time.localtime().tm_hour
         curmin = time.localtime().tm_min
         cursec = time.localtime().tm_sec
-        if curhour == self.hour and curmin == self.minute and cursec == 0:
+        if self.alarmstate and curhour == self.hour and curmin == self.minute and cursec == 0:
             self.playalarm()
 
     def updatealarm(self):
-        self.alarm = str(self.hour) + ':' + str(self.minute)
+        pickle.dump( (self.alarmstate, self.hour, self.minute), 
+            open( "alarm.p", "wb" ) )
+        if self.alarmstate:
+            self.alarm = '{0:02d}:{1:02d}'.format(self.hour,self.minute)
+        else:
+            self.alarm = 'Alarm Off.  Vol: {0:d}'.format(self.vol)
 
     def build(self):
         '''This method loads the root.kv file automatically
@@ -69,6 +76,7 @@ class EzsApp(App):
         # loading the content of root.kv
         self.root = Builder.load_file('root.kv')
         self.mixer = alsaaudio.Mixer('PCM', cardindex=1)
+        self.vol = int(self.mixer.getvolume()[0])
 
         GPIO.setmode(GPIO.BCM)
         self.mp3_files = [ f for f in listdir('.') if f[-4:] == '.mp3' ]
@@ -79,8 +87,12 @@ class EzsApp(App):
 
         self.index = 0
 
-        self.hour = 8
-        self.minute = 30
+        try:
+            self.alarmstate, self.hour, self.minute = pickle.load( open( "alarm.p", "rb" ) )
+	except:
+            self.hour = 8
+            self.minute = 30
+            self.alarmstate = True
         self.updatealarm()
 
     def clearsong():
@@ -130,12 +142,20 @@ class EzsApp(App):
     def playalarm(self):
         self.mixer.setvolume(alarmvol)
         subprocess.call(['killall', 'mpg123'])
-        subprocess.Popen(['mpg123', alarmfile])
+        subprocess.Popen(['mpg123'] + [alarmfile] * 5)
 
     def stopmusic(self):
         self.song = ''
         subprocess.call(['killall', 'mpg123'])
         print '--- Cleared all existing mp3s. ---'
+
+    def alarmon(self):
+        self.alarmstate = True
+        self.updatealarm()
+
+    def alarmoff(self):
+        self.alarmstate = False
+        self.updatealarm()
 
     def hourup(self):
         if self.hour < 24:
@@ -158,19 +178,18 @@ class EzsApp(App):
         self.updatealarm()
 
     def volup(self):
-        vol = self.mixer.getvolume()
-        vol = int(vol[0])
-        vol = vol + 1
-        #vol = min(vol, 100)
-        vol = min(vol, 80)
-        self.mixer.setvolume(vol)
+        self.vol = self.vol + 1
+        self.vol = max(self.vol, 0)
+        self.vol = min(self.vol, maxvol)
+        self.mixer.setvolume(self.vol)
+        self.updatealarm()
 
     def voldown(self):
-        vol = self.mixer.getvolume()
-        vol = int(vol[0])
-        vol = vol - 1
-        vol = max(vol, 0)
-        self.mixer.setvolume(vol)
+        self.vol = self.vol - 1
+        self.vol = max(self.vol, 0)
+        self.vol = min(self.vol, maxvol)
+        self.mixer.setvolume(self.vol)
+        self.updatealarm()
 
 if __name__ == '__main__':
     '''Start the application'''
