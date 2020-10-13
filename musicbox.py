@@ -53,7 +53,8 @@ class EzsApp(App):
         curhour = time.localtime().tm_hour
         curmin = time.localtime().tm_min
         cursec = time.localtime().tm_sec
-        if self.alarmstate and curhour == self.hour and curmin == self.minute and cursec == 0:
+        curday = time.localtime().tm_wday
+        if self.alarmstate and curhour == self.hour and curmin == self.minute and cursec == 0 and curday < 5:
             self.playalarm()
 
     def updatealarm(self):
@@ -127,6 +128,7 @@ class EzsApp(App):
         
         self.song = 'Play ' + str(startsong) + ' - ' + str(endsong)
         subprocess.call(['killall', 'mpg123'])
+        subprocess.call(['the_matrix_scrolltext', 'GOOD', 'NIGHT'])
         subprocess.Popen(['mpg123'] + playlist)
         #popenAndCall(clearsong, ['mpg123'] + self.mp3_files)
 
@@ -136,17 +138,20 @@ class EzsApp(App):
             self.index = 0
         self.song = str(self.index) + ': ' + self.mp3_files[self.index]
         subprocess.call(['killall', 'mpg123'])
+        subprocess.Popen(['the_matrix_scrolltext', 'GOOD', 'NIGHT'])
         subprocess.Popen(['mpg123', self.mp3_files[self.index]])
         #popenAndCall(clearsong, ['mpg123', self.mp3_files[self.index]])
 
     def playalarm(self):
         self.mixer.setvolume(alarmvol)
         subprocess.call(['killall', 'mpg123'])
+        subprocess.Popen(['the_matrix_scrolltext', 'WAKE', 'UP'])
         subprocess.Popen(['mpg123'] + [alarmfile] * 5)
 
     def stopmusic(self):
         self.song = ''
         subprocess.call(['killall', 'mpg123'])
+        subprocess.Popen(['the_matrix_scrolltext', ' '])
         print '--- Cleared all existing mp3s. ---'
 
     def alarmon(self):
@@ -156,6 +161,42 @@ class EzsApp(App):
     def alarmoff(self):
         self.alarmstate = False
         self.updatealarm()
+
+    def d0(self):
+        return
+
+    def d1(self):
+        return
+
+    def d2(self):
+        return
+
+    def d3(self):
+        return
+
+    def d4(self):
+        return
+
+    def d5(self):
+        return
+
+    def d6(self):
+        return
+
+    def d7(self):
+        return
+
+    def d8(self):
+        return
+
+    def d9(self):
+        return
+
+    def dce(self):
+        return
+
+    def dgo(self):
+        return
 
     def hourup(self):
         if self.hour < 24:

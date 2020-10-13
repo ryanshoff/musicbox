@@ -1,6 +1,16 @@
 #:kivy 1.8.0
 
 RootWidget:
+
+    canvas.before: 
+        Color: 
+            rgba: (1, 1, 1, 1) 
+        Rectangle: 
+            source:'wallpaper-moon.png'
+            size: root.width, root.height 
+            pos: self.pos 
+
+
     BoxLayout:
         orientation: 'horizontal'
         spacing: 0
@@ -13,12 +23,20 @@ RootWidget:
 
             Label:
                 text: app.date
-                color: [1., 0, .616, 1.]
+                font_size: 22.5
+                #color: [1., 0, .616, 1.]
+           
+            Image:
+                id: imageView
+                source: 'moobloom2.png'
+                allow_stretch: True
+  
+
 
             Label:
                 text: app.time
                 font_size: 50
-                color: [1., 0, .616, 1.]
+                #color: [1., 0, .616, 1.]
 
         BoxLayout:
             orientation: 'vertical'
@@ -27,44 +45,45 @@ RootWidget:
 
             Label:
                 text: "Kate's Musicbox"
+                font_size: 30
 
             Label:
                 text: app.song
-
+                font_size:15
             Button:
                 text: 'Play'
                 on_release: app.playmusic()
-                background_color: [0, 1., .898, 1.]
-                background_normal: 'atlas://data/images/defaulttheme/button_pressed'
-                background_down: 'atlas://data/images/defaulttheme/button'
-
+                background_color: [0, 0, .6, 1.]
+                #background_normal: 'atlas://data/images/defaulttheme/button_pressed'
+                #background_down: 'atlas://data/images/defaulttheme/button'
+                font_size:25
 
             Button:
                 text: 'Play Five'
                 on_release: app.playall()
-                background_color: [.396, 0, 1., 1.]
-                background_normal: 'atlas://data/images/defaulttheme/button_pressed'
-                background_down: 'atlas://data/images/defaulttheme/button'
-
+                background_color: [0, 0, .6, 1.]
+                #background_normal: 'atlas://data/images/defaulttheme/button_pressed'
+                #background_down: 'atlas://data/images/defaulttheme/button'
+                font_size:25
             Button:
                 text: 'Stop'
                 on_release: app.stopmusic()
-                background_color: [1., 0, 0, 1.]
-
+                background_color: [0, 0, .6, 1.]
+                font_size:25
             Button:
                 text: 'Volume +'
                 on_release: app.volup()
-                background_color: [.607, 1., 0, 1.]
-                background_normal: 'atlas://data/images/defaulttheme/button_pressed'
-                background_down: 'atlas://data/images/defaulttheme/button'
-
+                background_color: [0, 0, .6, 1.]
+                #background_normal: 'atlas://data/images/defaulttheme/button_pressed'
+                #background_down: 'atlas://data/images/defaulttheme/button'
+                font_size:25
             Button:
                 text: 'Volume -'
                 on_release: app.voldown()
-                background_color: [1., 0, .616, 1.]
-                background_normal: 'atlas://data/images/defaulttheme/button_pressed'
-                background_down: 'atlas://data/images/defaulttheme/button'
-
+                background_color: [0, 0, .6, 1.]
+                #background_normal: 'atlas://data/images/defaulttheme/button_pressed'
+                #background_down: 'atlas://data/images/defaulttheme/button'
+                font_size:25 
         BoxLayout:
             orientation: 'vertical'
             padding: 0
@@ -78,15 +97,21 @@ RootWidget:
                 Button:
                     text: '+'
                     on_press: app.hourup()
+                    background_color: [0, 0, .6, 1.]
+                    font_size:25 
                 Button:
                     text: '+'
                     on_press: app.minuteup()
+                    background_color: [0, 0, .6, 1.]
+                    font_size:25 
                 Button:
                     text: 'On'
                     on_press: app.alarmon()
-
+                    background_color: [0, 0, .6, 1.]
+                    font_size:25 
             Label:
                 text: app.alarm
+                font_size:30
 
             BoxLayout:
                 orientation: 'horizontal'
@@ -96,11 +121,17 @@ RootWidget:
                 Button:
                     text: '-'
                     on_press: app.hourdown()
+                    background_color: [0, 0, .6, 1.]
+                    font_size:25 
                 Button:
                     text: '-'
                     on_press: app.minutedown()
+                    background_color: [0, 0, .6, 1.]
+                    font_size:25 
                 Button:
                     text: 'Off'
                     on_press: app.alarmoff()
+                    background_color: [0, 0, .6, 1.]
+                    font_size:25
 
 
